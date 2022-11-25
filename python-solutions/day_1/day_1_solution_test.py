@@ -1,16 +1,18 @@
 import unittest
+from day_1_solution import Day1
+
 
 class TestDay1(unittest.TestCase):
-    day_1 = Day1('task-1-input-test', 'task-2-input-test.txt')
     def test_task_1(self):
+        day_1 = Day1(file_task_1='task_1_test_input.txt', output_file_task_1='task_1_test_output.txt')
         expected_output = []
-        with open('task-1-test-output-expected.txt', 'r') as file:
+        with open('task_1_test_output_expected.txt', 'r') as file:
             for line in file:
-                expected_output.append(line.strip())
-        program_output = self.day_1.solve_task_1()
-        for expected_line, program_line  in zip(expected_output, program_output):
-            self.assertEqual(expected_line, program_line)
+                expected_output.append(int(line))
+        program_output = day_1.solve_task_1()
+        self.assertEqual(expected_output, program_output)
+        day_1.write_task_1()
 
 
 if __name__ == '__main__':
-    TestDay1.test_task_1()
+    TestDay1().test_task_1()
