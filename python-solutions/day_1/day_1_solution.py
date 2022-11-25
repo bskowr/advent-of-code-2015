@@ -1,19 +1,12 @@
 class Day1:
-    def __init__(self, input_task_1=None, file_task_1=None, input_task_2=None, file_task_2=None,
+    def __init__(self, input=None, file_input=None,
                  output_file_task_1=None, output_file_task_2=None, ):
-        if input_task_1 is not None:
-            self.input_task_1 = input_task_1
-        elif file_task_1 is not None:
-            self.input_task_1 = self.__read_input(file_task_1)
+        if input is not None:
+            self.input = input
+        elif file_input is not None:
+            self.input = self.__read_input(file_input)
         else:
-            self.input_task_1 = self.__read_input('task_1_input.txt')
-
-        if input_task_2 is not None:
-            self.input_task_2 = input_task_2
-        elif file_task_2 is not None:
-            self.input_task_2 = self.__read_input(file_task_2)
-        else:
-            self.input_task_2 = self.__read_input('task_2_input.txt')
+            self.input = self.__read_input('input.txt')
 
         if output_file_task_1 is None:
             self.output_file_task_1 = 'task_1_output.txt'
@@ -32,7 +25,7 @@ class Day1:
 
     def solve_task_1(self):
         result = []
-        for i, line in enumerate(self.input_task_1):
+        for line in self.input:
             result.append(line.count('(') - line.count(')'))
         return result
 
@@ -42,10 +35,37 @@ class Day1:
 
     def write_task_1(self):
         with open(self.output_file_task_1, 'w') as output_file:
-            for i, result in enumerate(self.solve_task_1()):
+            for result in self.solve_task_1():
+                output_file.write(f'{result}\n')
+
+    def solve_task_2(self):
+        result = []
+        for line in self.input:
+            result.append(0)
+            floor = 0
+            for i, instruction in enumerate(line.strip()):
+                if instruction == '(':
+                    floor += 1
+                elif instruction == ')':
+                    floor -= 1
+                if floor < 0:
+                    result[len(result) - 1] = (i+1)
+                    break
+        return result
+
+    def print_task_2(self):
+        for i, result in enumerate(self.solve_task_2()):
+            print(f'Line {i}: {result}')
+
+    def write_task_2(self):
+        with open(self.output_file_task_2, 'w') as output_file:
+            for result in self.solve_task_2():
                 output_file.write(f'{result}\n')
 
 
 if __name__ == '__main__':
-    Day1().print_task_1()
-    Day1().write_task_1()
+    day_1 = Day1()
+    day_1.print_task_1()
+    day_1.write_task_1()
+    day_1.print_task_2()
+    day_1.write_task_2()
